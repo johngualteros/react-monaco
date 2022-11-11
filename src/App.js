@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import Editor from '@monaco-editor/react';
+import {useState, useRef} from 'react';
 
-function App() {
+export default function App() {
+  const [code, setCode] = useState('');
+  const editorRef = useRef(null);
+
+  const changeStateCode = (value) => {
+    setCode(value);
+    console.log(code);
+  }
+
+  const handleEditorDidMount = (editor, monaco) => {
+    editorRef.current = editor;
+  }
+
+  const handleSave = () => {
+    alert(editorRef.current.getValue());
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+    <button onClick={handleSave}>Save</button>
+    <Editor
+      height="100vh"
+      defaultLanguage="typescript"
+      defaultValue="// some comment"
+      theme='vs-dark'
+      value={code}
+      onChange={changeStateCode}
+      onMount={handleEditorDidMount}
+      />
+    </>
+  )
 }
-
-export default App;
